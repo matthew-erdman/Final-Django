@@ -1,12 +1,14 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse
+from .models import Entry, Comment
 
 # Create your views here.
 def index(request):
     return HttpResponse("Welcome to the wiki index!")
 
 def detail(request, post_id):
-	return HttpResponse("You're looking at post %s." % post_id)
+	entry = get_object_or_404(Entry, pk=post_id)
+	return render(request, 'wiki/detail.html', {'entry': entry}, {'logged_in': True})
 
 def edit(request, post_id):
 	logged_in = True
