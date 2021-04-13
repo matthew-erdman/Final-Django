@@ -1,1 +1,26 @@
 <p>Welcome to the wiki index!</p>
+{% if loggedIn %}
+  <p>Logged in as: {{user}}</p>
+  <form style="padding-bottom:1em;" method="POST">
+    {% csrf_token %}
+    <input type="hidden" name="logout" value="logout"></input>
+    <button type="submit">Logout</button>
+  </form>
+{% else %}
+  <form style="padding-bottom:1em;" method="POST">
+  {% csrf_token %}
+
+  <div class="form-group">
+    <label for="inputUsername">Username</label>
+    <input type="text" class="form-control" name="inputUsername" id="inputUsername" />
+  </div>
+
+  <div class="form-group">
+    <label for="inputPassword">Password</label>
+    <input type="password" class="form-control" name="inputPassword" id="inputPassword" />
+  </div>
+
+  <button type="submit">Login</button>
+</form>
+
+{% endif %}
