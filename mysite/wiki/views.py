@@ -6,7 +6,7 @@ from .models import Entry, Comment
 
 # Create your views here.
 def index(request):
-    if request.POST:
+    if request.method == 'POST':
         # This tests if the form is the log *in* form
         if 'inputUsername' in request.POST.keys():
             # IF so, try to authenticate
