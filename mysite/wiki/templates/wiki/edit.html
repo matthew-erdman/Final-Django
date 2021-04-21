@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Edit: {{entry.entry_title}}</title>
+    <meta charset="utf-8"></meta>
+  	<style>
+      body {
+        background-color: lightblue;
+      }
+      h2 {
+      text-align: center;
+      }
+      h3 {
+      text-align: center;
+      }
+      p {
+      text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    {% if not loggedIn %}
+      <h3 style="color:red;">Unable to edit: user not logged in!</h3>
+    {% endif %}
+		<h2>{{ entry.entry_title }}</h2>
+		<p>Description: <b>{{ entry.entry_text }}</b></p>
+		<p>Created: <b><i>{{ entry.entry_date }}</b></i></p>
+		{% if loggedIn %}
+      
+		{% endif %}
+	</body>
+</html>

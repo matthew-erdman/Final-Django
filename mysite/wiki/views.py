@@ -32,10 +32,6 @@ def detail(request, post_id):
     return render(request, 'wiki/detail.html', {'entry': entry})
 
 def edit(request, post_id):
-    logged_in = True
-    if logged_in:
-        response = "You're editing post %s as a logged in user."
-        return HttpResponse(response % post_id)
-    else:
-        response = "You're trying to edit post %s but aren't logged in."
-        return HttpResponse(response % post_id)
+    loggedIn = request.user.is_authenticated
+    entry = get_object_or_404(Entry, pk=post_id)
+    return render(request, 'wiki/edit.html', {'loggedIn': loggedIn, 'user': request.user, 'entry': entry})
