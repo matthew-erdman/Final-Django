@@ -12,9 +12,9 @@ class Entry(models.Model):
 	entry_updated = models.DateTimeField(auto_now=True)
 	def __str__(self):
 		if len(self.entry_title) > 28:
-			return self.entry_title[:25] + '...'
+			return self.entry_title[:25] + '... - ' + self.entry_text
 		else:
-			return self.entry_title
+			return self.entry_title + ' - ' + self.entry_text
 
 
 class Comment(models.Model):

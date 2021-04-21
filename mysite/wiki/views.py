@@ -48,12 +48,14 @@ class edit(View):
         loggedIn = request.user.is_authenticated
         return render(request, 'wiki/edit.html', {'loggedIn': loggedIn, 'user': request.user, 'entry': entry})
 
-    def post(self, request):
+    def post(self, request, post_id):
+        entry = get_object_or_404(Entry, pk=post_id)
         loggedIn = request.user.is_authenticated
         if loggedIn:
             if 'editTitle' in request.POST.keys():
-                self.entry.entry_title = request.POST['editTitle']
-                self.entry.save()
+                entry.entry_title = request.POST['editTitle']
+                entry.save()
             elif 'editText' in request.POST.keys():
-                self.entry.entry_text = request.POST['editText']
-                self.entry.save()
+                entry.entry_text = request.POST['editText']
+                entry.save()
+        return render(request, 'wiki/edit.html', {'loggedIn': loggedIn, 'user': request.user, 'entry': entry})
