@@ -34,4 +34,12 @@ def detail(request, post_id):
 def edit(request, post_id):
     loggedIn = request.user.is_authenticated
     entry = get_object_or_404(Entry, pk=post_id)
+    if request.method == 'POST' and request.user.is_authenticated:
+        if 'editTitle' in request.POST.keys(): #and strip(request.POST['editTitle']):
+            entry.entry_title = request.POST['editTitle']
+            entry.save()
+        elif 'editText' in request.POST.keys(): #and strip(request.POST['editText']):
+            entry.entry_text = request.POST['editText']
+            entry.save()
+
     return render(request, 'wiki/edit.html', {'loggedIn': loggedIn, 'user': request.user, 'entry': entry})

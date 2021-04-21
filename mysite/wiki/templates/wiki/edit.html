@@ -22,11 +22,25 @@
     {% if not loggedIn %}
       <h3 style="color:red;">Unable to edit: user not logged in!</h3>
     {% endif %}
+
 		<h2>{{ entry.entry_title }}</h2>
 		<p>Description: <b>{{ entry.entry_text }}</b></p>
 		<p>Created: <b><i>{{ entry.entry_date }}</b></i></p>
-		{% if loggedIn %}
-      
-		{% endif %}
+
+    {% if loggedIn %}
+      <h4>Editing as: {{user}}</h4>
+      <form style="padding-bottom:1em;" method="POST">
+        {% csrf_token %}
+        <label for="editTitle">Edit title</label>
+        <input type="text" class="form-control" name="editTitle" id="editTitle" />
+        <button type="submit">Submit</button>
+      </form>
+      <form style="padding-bottom:1em;" method="POST">
+        {% csrf_token %}
+        <label for="editText">Edit description</label>
+        <input type="text" class="form-control" name="editText" id="editText" />
+        <button type="submit">Submit</button>
+      </form>
+    {% endif %}
 	</body>
 </html>
