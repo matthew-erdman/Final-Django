@@ -1,46 +1,59 @@
 from django.shortcuts import get_object_or_404, render
 from django.utils import timezone
 from django.http import HttpResponse
+from django.views import View
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import AuthenticationForm
 from .models import Entry, Comment
 
 # Create your views here.
-def index(request):
-    if request.method == 'POST':
-        # This tests if the form is the log *in* form
-        if 'inputUsername' in request.POST.keys():
-            # IF so, try to authenticate
-            user = authenticate(username=request.POST['inputUsername'],
-                password=request.POST['inputPassword'])
-            if user is not None:
-                # IF success, then use the login function so the session persists.
-                login(request, user)
-            else:
-                pass
-                # Message for failed login.
-        # This tests if the form is the log *out* form
-        elif 'logout' in request.POST.keys():
-            # If so, don't need to check anything else, just kill the session.
+class index(View):
+    def get(self, request):
+        loggedIn = request.user.is_authenticated
+        form = AuthenticationForm()
+        return render(request, 'wiki/index.html', {'loggedIn': loggedIn, 'user': request.user, 'form': form})
+
+    def post(self, request):
+        # First check if we are coming here after hitting 'Logout'
+        if 'logout' in request.POST.keys():
+            # Then log out
             logout(request)
-    # After we check the forms, set a flag for use in the template.
-    loggedIn = request.user.is_authenticated
-    # Find the template
-    return render(request, 'wiki/index.html', {'loggedIn': loggedIn, 'user': request.user})
+            # We load an empty form with no data
+            form = AuthenticationForm()
+        else:
+            # We're if we got her after hitting 'Login'
+            # So we match up the data with the form fields
+            form = AuthenticationForm(data=request.POST)
+            # Validate and clean the data
+            if form.is_valid():
+                username = form.cleaned_data['username']
+                password = form.cleaned_data['password']
+                # Then authenticate and log in.
+                user = authenticate(username = username, password = password)
+                if user is not None:
+                    login(request, user = user)
+        loggedIn = request.user.is_authenticated
+        form = AuthenticationForm()
+        return render(request, 'wiki/index.html', {'loggedIn': loggedIn, 'user': request.user, 'form': form})
 
-def detail(request, post_id):
-    entry = get_object_or_404(Entry, pk=post_id)
-    return render(request, 'wiki/detail.html', {'entry': entry})
+class detail(View):
+    def get(self, request, post_id):
+        entry = get_object_or_404(Entry, pk=post_id)
+        return render(request, 'wiki/detail.html', {'entry': entry})
 
-def edit(request, post_id):
-    loggedIn = request.user.is_authenticated
-    entry = get_object_or_404(Entry, pk=post_id)
-    if request.method == 'POST' and request.user.is_authenticated:
-        if 'editTitle' in request.POST.keys():
-            entry.entry_title = request.POST['editTitle']
-            entry.save()
-        elif 'editText' in request.POST.keys():
-            entry.entry_text = request.POST['editText']
-            entry.save()
+class edit(View):
+    def get(self, request, post_id):
+        entry = get_object_or_404(Entry, pk=post_id)
+        loggedIn = request.user.is_authenticated
+        return render(request, 'wiki/edit.html', {'loggedIn': loggedIn, 'user': request.user, 'entry': entry})
 
-    return render(request, 'wiki/edit.html', {'loggedIn': loggedIn, 'user': request.user, 'entry': entry})
+    def post(self, request):
+        loggedIn = request.user.is_authenticated
+        if loggedIn:
+            if 'editTitle' in request.POST.keys():
+                self.entry.entry_title = request.POST['editTitle']
+                self.entry.save()
+            elif 'editText' in request.POST.keys():
+                self.entry.entry_text = request.POST['editText']
+                self.entry.save()

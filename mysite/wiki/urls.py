@@ -1,11 +1,10 @@
 from django.urls import path
-
-from . import views
+from wiki.views import index, detail, edit
 
 urlpatterns = [
-	path('', views.index, name='index'),
+	path('', index.as_view()),
     # ex: /wiki/5/
-    path('<int:post_id>/', views.detail, name='detail'),
+    path('<int:post_id>/', detail.as_view()),
     # ex: /wiki/5/edit/
-    path('<int:post_id>/edit/', views.edit, name='edit'),
+    path('<int:post_id>/edit/', edit.as_view()),
 ]

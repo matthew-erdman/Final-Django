@@ -29,15 +29,9 @@
       <form style="padding-bottom:1em;" method="POST">
         {% csrf_token %}
 
-        <div class="form-group">
-          <label for="inputUsername">Username</label>
-          <input type="text" class="form-control" name="inputUsername" id="inputUsername" />
-        </div>
-
-        <div class="form-group">
-          <label for="inputPassword">Password</label>
-          <input type="password" class="form-control" name="inputPassword" id="inputPassword" />
-        </div>
+        <table>
+          {{ form }}
+        </table>
 
         <button type="submit">Login</button>
       </form>
