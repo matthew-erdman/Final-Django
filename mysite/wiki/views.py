@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404, render
+from django.utils import timezone
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
@@ -35,10 +36,10 @@ def edit(request, post_id):
     loggedIn = request.user.is_authenticated
     entry = get_object_or_404(Entry, pk=post_id)
     if request.method == 'POST' and request.user.is_authenticated:
-        if 'editTitle' in request.POST.keys(): #and strip(request.POST['editTitle']):
+        if 'editTitle' in request.POST.keys():
             entry.entry_title = request.POST['editTitle']
             entry.save()
-        elif 'editText' in request.POST.keys(): #and strip(request.POST['editText']):
+        elif 'editText' in request.POST.keys():
             entry.entry_text = request.POST['editText']
             entry.save()
 

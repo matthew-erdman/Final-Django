@@ -7,7 +7,9 @@ from django.contrib.auth.models import User
 class Entry(models.Model):
 	entry_title = models.CharField(max_length=100)
 	entry_text = models.CharField(max_length=5000)
-	entry_date = models.DateTimeField('date published')
+	entry_author = models.ForeignKey(User, on_delete=models.CASCADE)
+	entry_date = models.DateTimeField(auto_now_add=True)
+	entry_updated = models.DateTimeField(auto_now=True)
 	def __str__(self):
 		if len(self.entry_title) > 28:
 			return self.entry_title[:25] + '...'
