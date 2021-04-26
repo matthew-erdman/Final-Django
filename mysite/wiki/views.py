@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.utils import timezone
 from django.http import HttpResponse
 from django.views import View
@@ -32,14 +32,11 @@ class index(View):
         return render(request, 'wiki/index.html', {'loggedIn': loggedIn, 'user': request.user, 'form': form})
 
     def post(self, request):
-        authUser(request)
-        loggedIn = request.user.is_authenticated
-        form = AuthenticationForm()
         submitTitle = request.POST.get('submitTitle', 'Example Title')
         submitText = request.POST.get('submitText', 'Example Text')
         newEntry = Entry(entry_title=submitTitle, entry_text=submitText)
         newEntry.save()
-        return render(request, 'wiki/index.html', {'loggedIn': loggedIn, 'user': request.user, 'form': form})
+        return redirect('detail', post_id=newEntry.id)
 
 class detail(View):
     def get(self, request, post_id):
