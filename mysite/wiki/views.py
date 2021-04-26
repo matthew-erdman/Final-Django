@@ -8,6 +8,23 @@ from django.contrib.auth.forms import AuthenticationForm
 from .models import Entry, Comment
 
 # Create your views here.
+def authUser(request):
+    if 'logout' in request.POST.keys():
+        # Then log out
+        logout(request)
+    else:
+        # We're if we got her after hitting 'Login'
+        # So we match up the data with the form fields
+        form = AuthenticationForm(data=request.POST)
+        # Validate and clean the data
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            # Then authenticate and log in.
+            user = authenticate(username = username, password = password)
+            if user is not None:
+                login(request, user = user)
+
 class index(View):
     def get(self, request):
         loggedIn = request.user.is_authenticated
@@ -15,26 +32,13 @@ class index(View):
         return render(request, 'wiki/index.html', {'loggedIn': loggedIn, 'user': request.user, 'form': form})
 
     def post(self, request):
-        # First check if we are coming here after hitting 'Logout'
-        if 'logout' in request.POST.keys():
-            # Then log out
-            logout(request)
-            # We load an empty form with no data
-            form = AuthenticationForm()
-        else:
-            # We're if we got her after hitting 'Login'
-            # So we match up the data with the form fields
-            form = AuthenticationForm(data=request.POST)
-            # Validate and clean the data
-            if form.is_valid():
-                username = form.cleaned_data['username']
-                password = form.cleaned_data['password']
-                # Then authenticate and log in.
-                user = authenticate(username = username, password = password)
-                if user is not None:
-                    login(request, user = user)
+        authUser(request)
         loggedIn = request.user.is_authenticated
         form = AuthenticationForm()
+        submitTitle = request.POST.get('submitTitle', 'Example Title')
+        submitText = request.POST.get('submitText', 'Example Text')
+        newEntry = Entry(entry_title=submitTitle, entry_text=submitText)
+        newEntry.save()
         return render(request, 'wiki/index.html', {'loggedIn': loggedIn, 'user': request.user, 'form': form})
 
 class detail(View):

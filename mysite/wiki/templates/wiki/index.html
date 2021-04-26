@@ -10,13 +10,10 @@
       h2 {
       text-align: center;
       }
-      p {
-      text-align: center;
-      }
     </style>
   </head>
   <body>
-    <p>Welcome to the wiki index!</p>
+    <h2>Welcome to the wiki index!</h2>
 
     {% if loggedIn %}
       <p>Logged in as: {{user}}</p>
@@ -25,7 +22,25 @@
         <input type="hidden" name="logout" value="logout"></input>
         <button type="submit">Logout</button>
       </form>
+
+      <p>Create new post</p>
+      <form style="padding-bottom:1em;" method="POST">
+          {% csrf_token %}
+
+          <div class="form-group">
+            <label for="submitTitle">Post Title</label>
+            <input type="text" class="form-control" name="submitTitle" id="submitTitle" />
+          </div>
+
+          <div class="form-group">
+            <label for="submitText">Post Text</label>
+            <input type="text" class="form-control" name="submitText" id="submitText" />
+          </div>
+
+          <button type="submit" class="btn btn-danger">Sumbit Post</button>
+      </form>
     {% else %}
+      <h3 style='color:red;'>User not logged in!</h3>
       <form style="padding-bottom:1em;" method="POST">
         {% csrf_token %}
 
