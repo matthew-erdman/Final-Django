@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Wiki: {{entry.entry_title}}</title>
+    <meta charset="utf-8"></meta>
+  	<style>
+      body {
+        background-color: lightblue;
+      }
+      h2 {
+      text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+
+    {% if loggedIn %}
+      <h2>Welcome!</h2>
+      <p>Logged in as: {{user}}</p>
+      <form style="padding-bottom:1em;" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="logout" value="logout"></input>
+        <button type="submit">Logout</button>
+      </form>
+
+    {% else %}
+      <h2>Please log in!</h2>
+      <h3 style='color:red;'>User not logged in!</h3>
+      <form style="padding-bottom:1em;" method="POST">
+        {% csrf_token %}
+
+        <table>
+          {{ form }}
+        </table>
+
+        <button type="submit">Login</button>
+      </form>
+    {% endif %}
+  </body>
+</html>

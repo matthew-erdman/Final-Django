@@ -23,6 +23,7 @@ def authUser(request):
             # Then authenticate and log in.
             user = authenticate(username = username, password = password)
             if user is not None:
+                print(request)
                 login(request, user = user)
 
 class index(View):
@@ -37,6 +38,16 @@ class index(View):
         newEntry = Entry(entry_title=submitTitle, entry_text=submitText)
         newEntry.save()
         return redirect('detail', post_id=newEntry.id)
+
+class login(View):
+    def get(self, request):
+        loggedIn = request.user.is_authenticated
+        form = AuthenticationForm()
+        return render(request, 'wiki/login.html', {'loggedIn': loggedIn, 'user': request.user, 'form': form})
+
+    def post(self, request):
+        authUser(request)
+        return redirect('index')
 
 class detail(View):
     def get(self, request, post_id):
