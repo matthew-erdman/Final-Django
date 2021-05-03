@@ -22,11 +22,12 @@ def authUser(request):
             password = form.cleaned_data['password']
             # Then authenticate and log in.
             user = authenticate(username = username, password = password)
+            print(user)
             if user is not None:
                 print(request)
                 login(request, user = user)
 
-class index(View):
+class Index(View):
     def get(self, request):
         loggedIn = request.user.is_authenticated
         form = AuthenticationForm()
@@ -39,7 +40,7 @@ class index(View):
         newEntry.save()
         return redirect('detail', post_id=newEntry.id)
 
-class login(View):
+class Login(View):
     def get(self, request):
         loggedIn = request.user.is_authenticated
         form = AuthenticationForm()
@@ -49,12 +50,12 @@ class login(View):
         authUser(request)
         return redirect('index')
 
-class detail(View):
+class Detail(View):
     def get(self, request, post_id):
         entry = get_object_or_404(Entry, pk=post_id)
         return render(request, 'wiki/detail.html', {'entry': entry})
 
-class edit(View):
+class Edit(View):
     def get(self, request, post_id):
         entry = get_object_or_404(Entry, pk=post_id)
         loggedIn = request.user.is_authenticated
