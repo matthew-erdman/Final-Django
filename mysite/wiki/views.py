@@ -27,6 +27,13 @@ def authUser(request):
                 print(request)
                 login(request, user = user)
 
+
+class UserView(View):
+    def get(self, request):
+        loggedIn = request.user.is_authenticated
+        Entry.objects.filter(entry_author=User)
+        return render(request, 'wiki/user.html', {'loggedIn': loggedIn, 'user': request.user})
+
 class Index(View):
     def get(self, request):
         loggedIn = request.user.is_authenticated
@@ -36,7 +43,7 @@ class Index(View):
     def post(self, request):
         submitTitle = request.POST.get('submitTitle', 'Example Title')
         submitText = request.POST.get('submitText', 'Example Text')
-        newEntry = Entry(entry_title=submitTitle, entry_text=submitText)
+        newEntry = Entry(entry_title=submitTitle, entry_text=submitText, entry_author=request.user)
         newEntry.save()
         return redirect('detail', post_id=newEntry.id)
 
