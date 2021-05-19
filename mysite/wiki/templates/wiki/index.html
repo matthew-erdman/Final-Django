@@ -32,11 +32,14 @@
             <input type="text" class="form-control" name="submitText" id="submitText" />
           </div>
 
-          <button type="submit" class="btn btn-danger">Sumbit Post</button>
+          <button type="submit" class="btn btn-danger">Submit Post</button>
       </form>
     {% else %}
       <h3 style='color:red;'>User not logged in!</h3>
-      <button type="submit">Login</button>
+      <form method="POST">
+        {% csrf_token %}
+        <button type="submit" name="loginRedirect">Login</button>
+      </form>
     {% endif %}
   </body>
 </html>
