@@ -8,7 +8,10 @@
         background-color: lightblue;
       }
       h2 {
-      text-align: center;
+        text-align: center;
+      }
+      p {
+        text-align: center;
       }
     </style>
   </head>
@@ -17,29 +20,24 @@
 
     {% if loggedIn %}
       <p>Logged in as: {{user}}</p>
-
-      <p>Create new post</p>
-      <form style="padding-bottom:1em;" method="POST">
-          {% csrf_token %}
-
-          <div class="form-group">
-            <label for="submitTitle">Post Title</label>
-            <input type="text" class="form-control" name="submitTitle" id="submitTitle" />
-          </div>
-
-          <div class="form-group">
-            <label for="submitText">Post Text</label>
-            <input type="text" class="form-control" name="submitText" id="submitText" />
-          </div>
-
-          <button type="submit" class="btn btn-danger">Submit Post</button>
-      </form>
+      <a href="/login"><button type="submit">Logout</button></a>
+      <a href="/create"><button type="submit">Create new post!</button></a>
     {% else %}
       <h3 style='color:red;'>User not logged in!</h3>
-      <form method="POST">
-        {% csrf_token %}
-        <button type="submit" name="loginRedirect">Login</button>
-      </form>
+      <a href="/login"><button type="submit">Login</button></a>
     {% endif %}
+    <table style="width:100%">
+    {% for entry in entries reversed %}
+        <tr>
+            <th><p>Created: <b><i>{{ entry.entry_date }}</b></i></p></th>
+            <th><p>Last updated: <b><i>{{ entry.entry_updated }}</b></i></p></th>
+            <th><a href="/{{ entry.id }}"><h2>{{ entry.entry_title }}</h2></a></th>
+            <th><p>Description: <b>{{ entry.entry_text }}</b></p></th>
+            <th><p>Author: <b>{{ entry.entry_author }}</b></p></th>
+            <th><br /><br /></th>
+        </tr>
+    {% endfor %}
+   </table>
+
   </body>
 </html>

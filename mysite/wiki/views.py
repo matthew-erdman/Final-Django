@@ -37,12 +37,19 @@ class UserView(View):
 class Index(View):
     def get(self, request):
         loggedIn = request.user.is_authenticated
-        return render(request, 'wiki/index.html', {'loggedIn': loggedIn, 'user': request.user})
+        return render(request, 'wiki/index.html', {'loggedIn': loggedIn, 'user': request.user, 'entries': Entry.objects.all()})
 
     def post(self, request):
         print(request.POST.keys())
         if 'loginRedirect' in request.POST.keys():
             return redirect('login')
+
+class Create(View):
+    def get(self, request):
+        loggedIn = request.user.is_authenticated
+        return render(request, 'wiki/create.html', {'loggedIn': loggedIn, 'user': request.user})
+
+    def post(self, request):
         submitTitle = request.POST.get('submitTitle', 'Example Title')
         submitText = request.POST.get('submitText', 'Example Text')
         newEntry = Entry(entry_title=submitTitle, entry_text=submitText, entry_author=request.user)

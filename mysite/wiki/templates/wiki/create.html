@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Create New Post!</title>
+    <meta charset="utf-8"></meta>
+  	<style>
+      body {
+        background-color: lightblue;
+      }
+      h2 {
+      text-align: center;
+      }
+      h3 {
+      text-align: center;
+      }
+      p {
+      text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+      {% if loggedIn %}
+        <p>Logged in as: {{user}}</p>
+        <a href="/login"><button type="submit">Logout</button></a>
+
+        <p>Create new post</p>
+        <form style="padding-bottom:1em;" method="POST">
+            {% csrf_token %}
+
+            <div class="form-group">
+              <label for="submitTitle">Post Title</label>
+              <input type="text" class="form-control" name="submitTitle" id="submitTitle" />
+            </div>
+
+            <div class="form-group">
+              <label for="submitText">Post Text</label>
+              <input type="text" class="form-control" name="submitText" id="submitText" />
+            </div>
+
+            <button type="submit" class="btn btn-danger">Submit Post</button>
+        </form>
+      {% else %}
+          <h3 style='color:red;'>User not logged in!</h3>
+          <a href="/login"><button type="submit">Login</button></a>
+      {% endif %}
+	</body>
+</html>
