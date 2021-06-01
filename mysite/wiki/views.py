@@ -26,8 +26,12 @@ def authUser(request):
             if user is not None:
                 # Valid uname/pw, log user in
                 login(request, user = user)
+            else:
+                return redirect('fail')
+        else:
+            return redirect('fail')
 
-# Account based view, handles login/logout and shows all posts by current user
+# User/Account based view, handles login/logout and shows all posts by current user
 class UserView(View):
     def get(self, request):
         loggedIn = request.user.is_authenticated
@@ -55,6 +59,8 @@ class Index(View):
         # Redirect to login/logout page
         if 'loginRedirect' in request.POST.keys():
             return redirect('user')
+        else:
+            return redirect('fail')
 
 # View for creating new posts
 class Create(View):
@@ -98,7 +104,7 @@ class Edit(View):
     def post(self, request, post_id):
         entry = get_object_or_404(Entry, pk=post_id)
         loggedIn = request.user.is_authenticated
-        # Verify that the user is logged in to show editing form
+        # Verify that the user is logged in
         # TODO: Auth checks current logged in acct against op acct
         if loggedIn:
             if 'editTitle' in request.POST.keys():
@@ -108,6 +114,13 @@ class Edit(View):
                 # Short desc, truncate at 47 char + ellipsis
                 if len(request.POST['editText']) > 50:
                     entry.entry_text_short = request.POST['editText'][:47] + '...'
-            # Save modified entry back into DB        
+            # Save modified entry back into DB
             entry.save()
+        else:
+            return redirect('fail')
         return render(request, 'wiki/edit.html', {'loggedIn': loggedIn, 'user': request.user, 'entry': entry})
+
+# View to handle failures
+class Fail(View):
+    def get(self, request):
+        return render(request, 'wiki/fail.html')
