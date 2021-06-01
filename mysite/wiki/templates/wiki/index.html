@@ -13,6 +13,19 @@
       p {
         text-align: center;
       }
+      th {
+        border: 1px solid rgb(190, 190, 190);
+        padding: 10px;
+      }
+      td {
+        text-align: center;
+      }
+      tr:nth-child(even) {
+        background-color: #eee;
+      }
+      tr:nth-child(odd) {
+        background-color: #bee;
+      }
     </style>
   </head>
   <body>
@@ -20,24 +33,30 @@
 
     {% if loggedIn %}
       <p>Logged in as: {{user}}</p>
-      <a href="/login"><button type="submit">Logout</button></a>
-      <a href="/create"><button type="submit">Create new post!</button></a>
+      <a href="/create/"><button type="submit">Create new post!</button></a>
+      <a href="/user/"><button type="submit">Account page</button></a>
     {% else %}
       <h3 style='color:red;'>User not logged in!</h3>
-      <a href="/login"><button type="submit">Login</button></a>
+      <a href="/user/"><button type="submit">Login</button></a>
     {% endif %}
     <table style="width:100%">
+        <tr>
+            <th>Created</th>
+            <th>Last updated</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Author</th>
+        </tr>
     {% for entry in entries reversed %}
         <tr>
-            <th><p>Created: <b><i>{{ entry.entry_date }}</b></i></p></th>
-            <th><p>Last updated: <b><i>{{ entry.entry_updated }}</b></i></p></th>
-            <th><a href="/{{ entry.id }}"><h2>{{ entry.entry_title }}</h2></a></th>
-            <th><p>Description: <b>{{ entry.entry_text }}</b></p></th>
-            <th><p>Author: <b>{{ entry.entry_author }}</b></p></th>
-            <th><br /><br /></th>
+            <th><b><i>{{ entry.entry_date }}</b></i></th>
+            <th><b><i>{{ entry.entry_updated }}</b></i></th>
+            <th><a href="/{{ entry.id }}/"><h2>{{ entry.entry_title }}</h2></a></th>
+            <th>{{ entry.entry_text_short }}</th>
+            <th><b>{{ entry.entry_author }}</b></th>
         </tr>
     {% endfor %}
-   </table>
+    </table>
 
   </body>
 </html>

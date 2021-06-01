@@ -20,10 +20,10 @@
   </head>
   <body>
       {% if loggedIn %}
-        <p>Logged in as: {{user}}</p>
-        <a href="/login"><button type="submit">Logout</button></a>
+        <h4>Logged in as: {{user}}</h4>
+        <a href="/"><button type="submit">Home</button></a>
 
-        <p>Create new post</p>
+        <h2>Create new post</h2>
         <form style="padding-bottom:1em;" method="POST">
             {% csrf_token %}
 
