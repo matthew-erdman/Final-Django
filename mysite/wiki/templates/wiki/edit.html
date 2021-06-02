@@ -13,19 +13,19 @@
     </style>
   </head>
   <body>
-    {% include 'wiki/header.html' %}
+    {% include 'wiki/header.html' %}<br />
     {% if not loggedIn %}
       <h3 style="color:red;">Unable to edit: user not logged in!</h3>
     {% endif %}
 
-    <h2>{{ entry.entry_title }}</h2>
-    <p>Description: <b>{{ entry.entry_text }}</b></p>
-    <p>Author: <b>{{ entry.entry_author }}</b></p>
-    <p>Created: <b><i>{{ entry.entry_date }}</b></i></p>
-    <p>Last updated: <b><i>{{ entry.entry_updated }}</b></i></p>
+    <h3>{{ entry.entry_title }}</h3><br />
+    <p><b>Description:</b> {{ entry.entry_text }}</p>
+    <p><b>Author:</b> {{ entry.entry_author }}</p>
+    <p><b>Created:</b> <i>{{ entry.entry_date }}</i></p>
+    <p><b>Last updated:</b> <i>{{ entry.entry_updated }}</i></p>
 
     {% if loggedIn %}
-      <br /><h4>Editing as: {{user}}</h4>
+      <br /><br /><h5>Editing as: {{user}}</h5>
       <form style="padding-bottom:1em;" method="POST">
         {% csrf_token %}
         <b><label for="editTitle">Edit title</label></b>

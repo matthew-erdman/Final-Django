@@ -4,9 +4,8 @@
       {% if loggedIn %}
         <title>User: {{ user }}</title></h3>
       {% else %}
-        <title>User: Not Logged In!</title></h3>
+        <title>Login</title></h3>
       {% endif %}
-
     <meta charset="utf-8"></meta>
   	<style>
       body {
@@ -39,19 +38,25 @@
   <body>
     {% include 'wiki/header.html' %}
     {% if not loggedIn %}
-      <h3 style="color:red;">Unable to view: user not logged in!</h3>
-      <h2>Please log in!</h2>
+      <br /><h3 style="color:red;">Unable to view: user not logged in!</h3>
+      <h4>Please log in!</h4>
       <form style="padding-bottom:1em;" method="POST">
         {% csrf_token %}
 
-        <table>
+        <br />
+        <table style="margin-left:auto; margin-right:auto;">
           {{ form }}
         </table>
 
-        <button type="submit">Login</button>
+        <br /><button type="submit">Login</button>
       </form>
     {% else %}
-
+        <br />
+        <form style="padding-bottom:1em;" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="logout" value="logout"></input>
+            <button type="submit">Logout</button>
+        </form>
         <br /><h2>{{user}}'s posts</h2><br />
         <table style="width:100%">
             <tr>
@@ -71,6 +76,7 @@
             </tr>
         {% endfor %}
        </table>
+       <br /><br />
     {% endif %}
 	</body>
 </html>

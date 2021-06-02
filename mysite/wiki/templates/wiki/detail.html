@@ -13,16 +13,18 @@
     </style>
   </head>
   <body>
-    {% include 'wiki/header.html' %}
+      <div class="container">
+        {% include 'wiki/header.html' %}<br />
 
-		<h2>{{ entry.entry_title }}</h2>
-		<p>Description: <b>{{ entry.entry_text }}</b></p>
-		<p>Author: <b>{{ entry.entry_author }}</b></p>
-		<p>Created: <b><i>{{ entry.entry_date }}</b></i></p>
-		<p>Last updated: <b><i>{{ entry.entry_updated }}</b></i></p>
+        <h3>{{ entry.entry_title }}</h3><br />
+        <p><b>Description:</b> {{ entry.entry_text }}</p>
+        <p><b>Author:</b> {{ entry.entry_author }}</p>
+        <p><b>Created:</b> <i>{{ entry.entry_date }}</i></p>
+        <p><b>Last updated:</b> <i>{{ entry.entry_updated }}</i></p>
 
-        {% if loggedIn %}
-            <a href="/{{ entry.id }}/edit/"><button type="submit">Edit this post as {{ request.user }}</button></a>
-        {% endif %}
+            {% if loggedIn %}
+                <br /><a href="/{{ entry.id }}/edit/"><button type="submit">Edit this post as {{ request.user }}</button></a>
+            {% endif %}
+        </div>
 	</body>
 </html>
