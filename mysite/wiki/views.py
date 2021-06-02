@@ -89,7 +89,8 @@ class Create(View):
 class Detail(View):
     def get(self, request, post_id):
         entry = get_object_or_404(Entry, pk=post_id)
-        return render(request, 'wiki/detail.html', {'entry': entry})
+        loggedIn = request.user.is_authenticated
+        return render(request, 'wiki/detail.html', {'loggedIn': loggedIn, 'user': request.user, 'entry': entry})
 
 # Edit view allows users or administrators to edit the content of posts
 class Edit(View):

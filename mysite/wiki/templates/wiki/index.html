@@ -29,16 +29,8 @@
     </style>
   </head>
   <body>
-    <h2>Welcome to the wiki index!</h2>
-
-    {% if loggedIn %}
-      <p>Logged in as: {{user}}</p>
-      <a href="/create/"><button type="submit">Create new post!</button></a>
-      <a href="/user/"><button type="submit">Account page</button></a>
-    {% else %}
-      <h3 style='color:red;'>User not logged in!</h3>
-      <a href="/user/"><button type="submit">Login</button></a>
-    {% endif %}
+    {% include 'wiki/header.html' %}
+    <br /><h3>Wiki Entries</h3><br />
     <table style="width:100%">
         <tr>
             <th>Created</th>
@@ -51,7 +43,7 @@
         <tr>
             <th><b><i>{{ entry.entry_date }}</b></i></th>
             <th><b><i>{{ entry.entry_updated }}</b></i></th>
-            <th><a href="/{{ entry.id }}/"><h2>{{ entry.entry_title }}</h2></a></th>
+            <th><a href="/{{ entry.id }}/"><h4>{{ entry.entry_title }}</h4></a></th>
             <th>{{ entry.entry_text_short }}</th>
             <th><b>{{ entry.entry_author }}</b></th>
         </tr>

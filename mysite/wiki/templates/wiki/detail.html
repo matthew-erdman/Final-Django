@@ -5,23 +5,24 @@
     <meta charset="utf-8"></meta>
   	<style>
       body {
-        background-color: lightblue;
+          background-color: lightblue;
       }
-      h2 {
-      text-align: center;
-      }
-      p {
-      text-align: center;
+      h2, h3, p {
+          text-align: center;
       }
     </style>
   </head>
   <body>
+    {% include 'wiki/header.html' %}
+
 		<h2>{{ entry.entry_title }}</h2>
 		<p>Description: <b>{{ entry.entry_text }}</b></p>
+		<p>Author: <b>{{ entry.entry_author }}</b></p>
 		<p>Created: <b><i>{{ entry.entry_date }}</b></i></p>
-		{% if loggedIn %}
+		<p>Last updated: <b><i>{{ entry.entry_updated }}</b></i></p>
 
-		{% endif %}
-        <a href="/"><button type="submit">Return home</button></a>
+        {% if loggedIn %}
+            <a href="/{{ entry.id }}/edit/"><button type="submit">Edit this post as {{ request.user }}</button></a>
+        {% endif %}
 	</body>
 </html>

@@ -37,6 +37,7 @@
     </style>
   </head>
   <body>
+    {% include 'wiki/header.html' %}
     {% if not loggedIn %}
       <h3 style="color:red;">Unable to view: user not logged in!</h3>
       <h2>Please log in!</h2>
@@ -49,17 +50,9 @@
 
         <button type="submit">Login</button>
       </form>
-    {% endif %}
+    {% else %}
 
-    {% if loggedIn %}
-        <h4>Viewing as: {{user}}</h4>
-        <a href="/"><button type="submit">Home</button></a>
-        <form style="padding-bottom:1em;" method="POST">
-          {% csrf_token %}
-          <input type="hidden" name="logout" value="logout"></input>
-          <button type="submit">Logout</button>
-        </form>
-        <h2>{{user}}'s posts</h2>
+        <br /><h2>{{user}}'s posts</h2><br />
         <table style="width:100%">
             <tr>
                 <th>Created</th>
@@ -72,8 +65,8 @@
             <tr>
                 <th><b><i>{{ entry.entry_date }}</b></i></th>
                 <th><b><i>{{ entry.entry_updated }}</b></i></th>
-                <th><a href="/{{ entry.id }}/"><h2>{{ entry.entry_title }}</h2></a></th>
-                <th>{{ entry.entry_text }}</th>
+                <th><a href="/{{ entry.id }}/"><h4>{{ entry.entry_title }}</h4></a></th>
+                <th>{{ entry.entry_text_short }}</th>
                 <th><b>{{ entry.entry_author }}</b></th>
             </tr>
         {% endfor %}

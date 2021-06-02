@@ -19,29 +19,29 @@
     </style>
   </head>
   <body>
-      {% if loggedIn %}
-        <h4>Logged in as: {{user}}</h4>
-        <a href="/"><button type="submit">Home</button></a>
+    {% include 'wiki/header.html' %}
+    {% if loggedIn %}
+    <h4>Logged in as: {{user}}</h4>
 
-        <h2>Create new post</h2>
-        <form style="padding-bottom:1em;" method="POST">
-            {% csrf_token %}
+    <h2>Create new post</h2>
+    <form style="padding-bottom:1em;" method="POST">
+        {% csrf_token %}
 
-            <div class="form-group">
-              <label for="submitTitle">Post Title</label>
-              <input type="text" class="form-control" name="submitTitle" id="submitTitle" />
-            </div>
+        <div class="form-group">
+          <label for="submitTitle">Post Title</label>
+          <input type="text" class="form-control" name="submitTitle" id="submitTitle" />
+        </div>
 
-            <div class="form-group">
-              <label for="submitText">Post Text</label>
-              <input type="text" class="form-control" name="submitText" id="submitText" />
-            </div>
+        <div class="form-group">
+          <label for="submitText">Post Text</label>
+          <input type="text" class="form-control" name="submitText" id="submitText" />
+        </div>
 
-            <button type="submit" class="btn btn-danger">Submit Post</button>
-        </form>
-      {% else %}
-          <h3 style='color:red;'>User not logged in!</h3>
-          <a href="/login"><button type="submit">Login</button></a>
-      {% endif %}
+        <button type="submit" class="btn btn-danger">Submit Post</button>
+    </form>
+    {% else %}
+      <h3 style='color:red;'>User not logged in!</h3>
+      <a href="/login"><button type="submit">Login</button></a>
+    {% endif %}
 	</body>
 </html>
