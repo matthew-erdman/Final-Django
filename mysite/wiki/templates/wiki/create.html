@@ -19,26 +19,32 @@
     </style>
   </head>
   <body>
+    <!-- Navbar -->
     {% include 'wiki/header.html' %}
     <br />
+
     {% if loggedIn %}
     <h4>Logged in as: {{user}}</h4>
 
+    <!-- User logged in, show new post form -->
     <h2>Create new post</h2>
     <form style="padding-bottom:1em;" method="POST">
         {% csrf_token %}
 
+        <!-- Title -->
         <div class="form-group">
           <label for="submitTitle">Post Title</label>
           <input type="text" class="form-control" name="submitTitle" id="submitTitle" />
-
+        <!-- Description -->
           <label for="submitText">Post Text</label>
           <input type="text" class="form-control" name="submitText" id="submitText" />
         </div>
+        <!-- Submit -->
         <button type="submit" class="btn btn-danger">Submit Post</button>
 
     </form>
     {% else %}
+      <!-- User not logged in, show error -->
       <h3 style='color:red;'>User not logged in!</h3>
       <a href="/user"><button type="submit">Login</button></a>
     {% endif %}

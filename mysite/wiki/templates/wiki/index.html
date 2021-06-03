@@ -29,9 +29,11 @@
     </style>
   </head>
   <body>
+    <!-- Navbar -->
     {% include 'wiki/header.html' %}
     <br /><h3>Wiki Entries</h3><br />
     <table style="width:100%">
+      <!-- Table headers -->
         <tr>
             <th>Created</th>
             <th>Last updated</th>
@@ -39,8 +41,11 @@
             <th>Description</th>
             <th>Author</th>
         </tr>
+
+    <!-- Show entries in reverse chronological order -->
     {% for entry in entries reversed %}
         <tr>
+            <!-- Display entry data -->
             <th><b><i>{{ entry.entry_date }}</b></i></th>
             <th><b><i>{{ entry.entry_updated }}</b></i></th>
             <th><a href="/{{ entry.id }}/"><h4>{{ entry.entry_title }}</h4></a></th>

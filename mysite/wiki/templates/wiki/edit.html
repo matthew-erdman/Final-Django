@@ -14,29 +14,36 @@
     </style>
   </head>
   <body>
+    <!-- Navbar -->
     {% include 'wiki/header.html' %}<br />
+
+    <!-- User not logged in, show error -->
     {% if not loggedIn %}
       <h3 style="color:red;">Unable to edit: user not logged in!</h3>
     {% endif %}
 
+    <!-- Dump entry data -->
     <h3>{{ entry.entry_title }}</h3><br />
     <p><b>Description:</b> {{ entry.entry_text }}</p>
     <p><b>Author:</b> {{ entry.entry_author }}</p>
     <p><b>Created:</b> <i>{{ entry.entry_date }}</i></p>
     <p><b>Last updated:</b> <i>{{ entry.entry_updated }}</i></p>
 
+    <!-- Only display edit form if user is logged in -->
     {% if loggedIn %}
       <br /><br /><h5>Editing as: {{user}}</h5>
       <form style="padding-bottom:1em;" method="POST">
           {% csrf_token %}
 
+          <!-- Title -->
           <div class="form-group">
             <label for="editTitle">Edit title</label>
             <input type="text" class="form-control" name="editTitle" id="editTitle" />
-
+          <!-- Description -->
             <label for="editText">Edit description</label>
             <input type="text" class="form-control" name="editText" id="editText" />
           </div>
+          <!-- Submit -->
           <button type="submit">Submit</button>
 
       </form>

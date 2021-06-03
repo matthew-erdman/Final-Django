@@ -11,10 +11,13 @@
     </style>
   </head>
   <body>
+    <!-- Navbar -->
     {% include 'wiki/header.html' %}
 	<h2>Oops!</h2>
     <p>Hmmm... Something went wrong.</p>
+    <!-- Show error message -->
     {{ msg }}
+    <!-- Exit buttons -->
     <a href="/"><button type="submit">Return home</button></a>
     <br />
     <a href="/user/"><button type="submit">Account page</button></a>

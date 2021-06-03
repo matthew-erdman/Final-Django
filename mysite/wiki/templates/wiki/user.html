@@ -36,7 +36,10 @@
     </style>
   </head>
   <body>
+    <!-- Navbar -->
     {% include 'wiki/header.html' %}
+
+    <!-- Show login form if user not logged in -->
     {% if not loggedIn %}
       <br /><h3 style="color:red;">Unable to view: user not logged in!</h3>
       <h4>Please log in!</h4>
@@ -45,30 +48,39 @@
 
         <br />
         <table style="margin-left:auto; margin-right:auto;">
+          <!-- Login form -->
           {{ form }}
         </table>
-
+        <!-- Submit -->
         <br /><button type="submit">Login</button>
       </form>
+      <!-- Or, jump to registration form -->
       <br /><br /><a href="/register/"><button type="submit">Register here!</button></a>
+
+    <!-- Show logout button and posts if user is logged in -->
     {% else %}
         <br />
+        <!-- logout button -->
         <form style="padding-bottom:1em;" method="POST">
             {% csrf_token %}
             <input type="hidden" name="logout" value="logout"></input>
             <button type="submit">Logout</button>
         </form>
+        <!-- Posts -->
         <br /><h2>{{user}}'s posts</h2><br />
         <table style="width:100%">
             <tr>
+                <!-- Table headers -->
                 <th>Created</th>
                 <th>Last updated</th>
                 <th>Title</th>
                 <th>Description</th>
                 <th>Author</th>
             </tr>
+        <!-- Show entries in reverse chronological order -->
         {% for entry in entries reversed %}
             <tr>
+                <!-- Display entry data -->
                 <th><b><i>{{ entry.entry_date }}</b></i></th>
                 <th><b><i>{{ entry.entry_updated }}</b></i></th>
                 <th><a href="/{{ entry.id }}/"><h4>{{ entry.entry_title }}</h4></a></th>

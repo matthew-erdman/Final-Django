@@ -14,28 +14,33 @@
     </style>
   </head>
   <body>
+    <!-- Navbar source -->
     <div class="container">
         <nav class="navbar navbar-expand-sm bg-dark navbar-dark sticky-top">
+          <!-- Homepage -->
         	<a class="navbar-brand" href="/">Wiki</a>
             <ul class="navbar-nav">
+              <!-- Homepage -->
                 <li class="nav-item">
                   <a class="nav-link" href="/">| Home |</a>
                 </li>
+            <!-- Only show account and create buttons if user is logged in -->
             {% if loggedIn %}
+                <!-- Account -->
                 <li class="nav-item">
                   <a class="nav-link" href="/user/">| {{ request.user }}'s Account |</a>
                 </li>
+                <!-- Create -->
                 <li class="nav-item">
                   <a class="nav-link" href="/create/">| New Post |</a>
                 </li>
+            <!-- Only show login button if user not logged in -->
             {% else %}
+                <!-- Login -->
                 <li class="nav-item">
                   <a class="nav-link" href="/user/">| Login |</a>
                 </li>
             {% endif %}
-                <li class="nav-item">
-                  <a class="nav-link" href="/">| Random Post |</a>
-                </li>
             </ul>
     	</nav>
 </div>
