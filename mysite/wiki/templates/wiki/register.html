@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Register</title>
+    <meta charset="utf-8"></meta>
+  	<style>
+      body {
+        background-color: lightblue;
+      }
+      h2 {
+        text-align: center;
+      }
+      h3 {
+        text-align: center;
+      }
+      p {
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    {% include 'wiki/header.html' %}
+      <br /><h3>Welcome, register here!</h3>
+      <form style="padding-bottom:1em;" method="POST">
+        {% csrf_token %}
+
+        <br />
+        <table style="margin-left:auto; margin-right:auto;">
+          {{ form }}
+        </table>
+
+        <br /><button type="submit">Login</button>
+      </form>
+	</body>
+</html>

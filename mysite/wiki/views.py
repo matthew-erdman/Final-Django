@@ -3,7 +3,7 @@ from django.utils import timezone
 from django.http import HttpResponse
 from django.views import View
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib.auth.forms import AuthenticationForm
 from .models import Entry, Comment
 
@@ -149,7 +149,46 @@ class Edit(View):
         }
         return render(request, 'wiki/edit.html', context)
 
-# View to handle failures and unexpected behavior
+# View for registering new users
+class Register(View):
+    def get(self, request):
+        context = {
+        'form': AuthenticationForm(),
+        }
+        return render(request, 'wiki/register.html', context)
+
+    # POST with a uname/pw was submitted
+    def post(self, request):
+        allUsers = get_user_model().objects.all()
+        form = AuthenticationForm(data=request.POST)
+        # Validate and clean form data
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+
+            # Ensure username isn't in use
+            for existingUser in allUsers:
+                if existingUser.username == username:
+                    return redirect('fail')
+
+            # Create new account and save to DB
+            user = User(username)
+            user.set_password(password)
+            user.save()
+
+        else:
+            return redirect('fail')
+
+        # Log into account
+        authUser(request)
+        # Redirect to user page
+        return redirect('user',)
+
+
+# View to handle failures and unexpected behavior with error message
 class Fail(View):
     def get(self, request):
-        return render(request, 'wiki/fail.html')
+        context = {
+        #'msg': msg,
+        }
+        return render(request, 'wiki/fail.html', context)
