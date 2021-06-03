@@ -22,7 +22,7 @@
         <p><b>Created:</b> <i>{{ entry.entry_date }}</i></p>
         <p><b>Last updated:</b> <i>{{ entry.entry_updated }}</i></p>
 
-            {% if loggedIn %}
+            {% if user == entry.entry_author or user.username == 'admin' %}
                 <br /><a href="/{{ entry.id }}/edit/"><button type="submit">Edit this post as {{ request.user }}</button></a>
             {% endif %}
         </div>

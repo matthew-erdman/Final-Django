@@ -27,16 +27,17 @@
     {% if loggedIn %}
       <br /><br /><h5>Editing as: {{user}}</h5>
       <form style="padding-bottom:1em;" method="POST">
-        {% csrf_token %}
-        <b><label for="editTitle">Edit title</label></b>
-        <input type="text" class="form-control" name="editTitle" id="editTitle" />
-        <button type="submit">Submit</button>
-      </form>
-      <form style="padding-bottom:1em;" method="POST">
-        {% csrf_token %}
-        <b><label for="editText">Edit description</label></b>
-        <input type="text" class="form-control" name="editText" id="editText" />
-        <button type="submit">Submit</button>
+          {% csrf_token %}
+
+          <div class="form-group">
+            <label for="editTitle">Edit title</label>
+            <input type="text" class="form-control" name="editTitle" id="editTitle" />
+
+            <label for="editText">Edit description</label>
+            <input type="text" class="form-control" name="editText" id="editText" />
+          </div>
+          <button type="submit">Submit</button>
+
       </form>
     {% endif %}
 	</body>

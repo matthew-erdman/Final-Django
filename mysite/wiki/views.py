@@ -31,53 +31,66 @@ def authUser(request):
         else:
             return redirect('fail')
 
-# User/Account based view, handles login/logout and shows all posts by current user
+# User/Account view, handles login/logout and shows all posts by current user
 class UserView(View):
     def get(self, request):
         loggedIn = request.user.is_authenticated
+        user = request.user
         form = AuthenticationForm()
-        entries = ''
         # All entries from user who requested page
+        entries = ''
         if loggedIn:
-            entries = Entry.objects.filter(entry_author=request.user)
+            entries = Entry.objects.filter(entry_author=user)
 
-        return render(request, 'wiki/user.html', {'loggedIn': loggedIn, 'user': request.user, 'form': form, 'entries': entries})
+        context = {
+        'loggedIn': loggedIn,
+        'user': user,
+        'form': form,
+        'entries': entries,
+        }
+        return render(request, 'wiki/user.html', context)
 
     def post(self, request):
         # Handle login/logout POST forms and redirect back to the user page
-        # TODO: Add login fail condition
         authUser(request)
         return redirect('user')
 
 # Main, landing page view
 class Index(View):
     def get(self, request):
-        loggedIn = request.user.is_authenticated
-        return render(request, 'wiki/index.html', {'loggedIn': loggedIn, 'user': request.user, 'entries': Entry.objects.all()})
-
-    def post(self, request):
-        # Redirect to login/logout page
-        if 'loginRedirect' in request.POST.keys():
-            return redirect('user')
-        else:
-            return redirect('fail')
+        context = {
+        'loggedIn': request.user.is_authenticated,
+        'user': request.user,
+        'entries': Entry.objects.all(),
+        }
+        return render(request, 'wiki/index.html', context)
 
 # View for creating new posts
 class Create(View):
     def get(self, request):
-        loggedIn = request.user.is_authenticated
-        return render(request, 'wiki/create.html', {'loggedIn': loggedIn, 'user': request.user})
+        context = {
+        'loggedIn': request.user.is_authenticated,
+        'user': request.user,
+        }
+        return render(request, 'wiki/create.html', context)
 
-    # POST with a title and/or description was submitted; blank fields are vaild
+    # POST with a title and/or description was submitted; blank fields are filled
     def post(self, request):
-        # TODO: 'Example' not filling, bad syntax for request.POST.get?
-        submitTitle = request.POST.get('submitTitle', 'Example Title')
-        submitText = request.POST.get('submitText', 'Example Text')
+        submitTitle = request.POST.get('submitTitle')
+        submitText = request.POST.get('submitText')
+        # If a field was left blank, fill with example text
+        if not submitTitle:
+            submitTitle = 'Example Title'
+        elif not submitText:
+            submitTitle = 'Example Text'
+
+        # Create short description, truncating at 47 char + ellipsis; <= 50 char
         if len(submitText) > 50:
-            # Create short description, truncating at 47 char + ellipsis
+
             entry_text_short = submitText[:47] + '...'
         else:
             entry_text_short = submitText
+
         # New Entry object
         newEntry = Entry(entry_title=submitTitle, entry_text=submitText, entry_author=request.user, entry_text_short=entry_text_short)
         # Save into DB
@@ -88,29 +101,38 @@ class Create(View):
 # Detail view dumps information about one post
 class Detail(View):
     def get(self, request, post_id):
-        entry = get_object_or_404(Entry, pk=post_id)
-        loggedIn = request.user.is_authenticated
-        return render(request, 'wiki/detail.html', {'loggedIn': loggedIn, 'user': request.user, 'entry': entry})
+        context = {
+        'loggedIn': request.user.is_authenticated,
+        'user': request.user,
+        'entry': get_object_or_404(Entry, pk=post_id),
+        }
+        return render(request, 'wiki/detail.html', context)
 
 # Edit view allows users or administrators to edit the content of posts
 class Edit(View):
     def get(self, request, post_id):
-        entry = get_object_or_404(Entry, pk=post_id)
-        loggedIn = request.user.is_authenticated
-        return render(request, 'wiki/edit.html', {'loggedIn': loggedIn, 'user': request.user, 'entry': entry})
+        context = {
+        'loggedIn': request.user.is_authenticated,
+        'user': request.user,
+        'entry': get_object_or_404(Entry, pk=post_id),
+        }
+        return render(request, 'wiki/edit.html', context)
 
-    # POST with a title and/or description was submitted; blank fields are vaild
-    # Should blank fields really be valid?
+    # POST with a title and/or description was submitted; blank fields are filled
     # TODO: More robust handling of multiple and empty fields
     def post(self, request, post_id):
         entry = get_object_or_404(Entry, pk=post_id)
         loggedIn = request.user.is_authenticated
-        # Verify that the user is logged in
-        # TODO: Auth checks current logged in acct against op acct
-        if loggedIn:
-            if 'editTitle' in request.POST.keys():
+        editTitle = request.POST.get('editTitle')
+        editText = request.POST.get('editText')
+
+        # Verify that the editor is the OP or admin
+        if request.user == entry.entry_author or request.user.username == 'admin':
+            # Only update filled fields
+            if editTitle:
                 entry.entry_title = request.POST['editTitle']
-            elif 'editText' in request.POST.keys():
+            if editText:
+                print('schmmovin')
                 entry.entry_text = request.POST['editText']
                 # Short desc, truncate at 47 char + ellipsis
                 if len(request.POST['editText']) > 50:
@@ -118,10 +140,16 @@ class Edit(View):
             # Save modified entry back into DB
             entry.save()
         else:
+            # Invalid account attempted to edit
             return redirect('fail')
-        return render(request, 'wiki/edit.html', {'loggedIn': loggedIn, 'user': request.user, 'entry': entry})
+        context = {
+        'loggedIn': loggedIn,
+        'user': request.user,
+        'entry': entry,
+        }
+        return render(request, 'wiki/edit.html', context)
 
-# View to handle failures
+# View to handle failures and unexpected behavior
 class Fail(View):
     def get(self, request):
         return render(request, 'wiki/fail.html')
