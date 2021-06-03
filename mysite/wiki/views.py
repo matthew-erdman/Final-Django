@@ -82,7 +82,7 @@ class Create(View):
         if not submitTitle:
             submitTitle = 'Example Title'
         elif not submitText:
-            submitTitle = 'Example Text'
+            submitText = 'Example Text'
 
         # Create short description, truncating at 47 char + ellipsis; <= 50 char
         if len(submitText) > 50:

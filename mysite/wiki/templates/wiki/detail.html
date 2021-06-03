@@ -2,10 +2,11 @@
 <html>
   <head>
     <title>Wiki: {{entry.entry_title}}</title>
-    <meta charset="utf-8"></meta>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="UTF-8">
   	<style>
       body {
           background-color: lightblue;
+          word-wrap: break-word;
       }
       h2, h3, p {
           text-align: center;
@@ -22,9 +23,9 @@
         <p><b>Created:</b> <i>{{ entry.entry_date }}</i></p>
         <p><b>Last updated:</b> <i>{{ entry.entry_updated }}</i></p>
 
-            {% if user == entry.entry_author or user.username == 'admin' %}
-                <br /><a href="/{{ entry.id }}/edit/"><button type="submit">Edit this post as {{ request.user }}</button></a>
-            {% endif %}
+        {% if user == entry.entry_author or user.username == 'admin' %}
+            <br /><a href="/{{ entry.id }}/edit/"><button type="submit">Edit this post as {{ request.user }}</button></a>
+        {% endif %}
         </div>
 	</body>
 </html>
