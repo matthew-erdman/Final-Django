@@ -2,6 +2,8 @@
 
 Final commit: 9f732be
 
+This is a wiki prototype, a future version could display individual pages in a more laid-out manner and handle more advanced formatting. Mostly, this handles auth and data submission forms without a fancy display.
+
 **Current test accounts:**
 1. [su] admin / admin
 2. bob / password
