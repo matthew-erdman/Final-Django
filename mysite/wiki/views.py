@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.views import View
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout, get_user_model
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from .models import Entry, Comment
 
 
@@ -153,34 +153,22 @@ class Edit(View):
 class Register(View):
     def get(self, request):
         context = {
-        'form': AuthenticationForm(),
+        'form': UserCreationForm(),
         }
         return render(request, 'wiki/register.html', context)
 
     # POST with a uname/pw was submitted
     def post(self, request):
         allUsers = get_user_model().objects.all()
-        form = AuthenticationForm(data=request.POST)
+        form = UserCreationForm(data=request.POST)
         # Validate and clean form data
+        print(request.POST)
+        print(form.errors.as_data())
         if form.is_valid():
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
-
-            # Ensure username isn't in use
-            for existingUser in allUsers:
-                if existingUser.username == username:
-                    return redirect('fail')
-
-            # Create new account and save to DB
-            user = User(username)
-            user.set_password(password)
-            user.save()
-
+            form.save()
         else:
             return redirect('fail')
 
-        # Log into account
-        authUser(request)
         # Redirect to user page
         return redirect('user',)
 
