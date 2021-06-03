@@ -22,14 +22,13 @@ def authUser(request):
             password = form.cleaned_data['password']
             # Authenticate form data
             user = authenticate(username = username, password = password)
-            print(user)
             if user is not None:
                 # Valid uname/pw, log user in
                 login(request, user = user)
             else:
-                return redirect('fail')
+                return redirect('fail', msg='could not authenticate user')
         else:
-            return redirect('fail')
+            return redirect('fail', msg=form.errors.as_data())
 
 # User/Account view, handles login/logout and shows all posts by current user
 class UserView(View):
@@ -141,7 +140,7 @@ class Edit(View):
             entry.save()
         else:
             # Invalid account attempted to edit
-            return redirect('fail')
+            return redirect('fail', msg='user does not have permission to edit this post')
         context = {
         'loggedIn': loggedIn,
         'user': request.user,
@@ -162,21 +161,19 @@ class Register(View):
         allUsers = get_user_model().objects.all()
         form = UserCreationForm(data=request.POST)
         # Validate and clean form data
-        print(request.POST)
-        print(form.errors.as_data())
         if form.is_valid():
             form.save()
         else:
-            return redirect('fail')
+            return redirect('fail', msg=form.errors.as_data())
 
         # Redirect to user page
-        return redirect('user',)
+        return redirect('user')
 
 
 # View to handle failures and unexpected behavior with error message
 class Fail(View):
-    def get(self, request):
+    def get(self, request, msg):
         context = {
-        #'msg': msg,
+        'msg': msg,
         }
         return render(request, 'wiki/fail.html', context)
